@@ -1,6 +1,7 @@
 package api
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 )
@@ -30,26 +31,28 @@ var (
 	ErrorOutOfStockError  = ErrorTemplate{Code: 20002, Message: "Out of stock", status: http.StatusOK}
 )
 
-var errorMessagePrefix string
+var errorMessagePrefix = "unknown service"
 
 func SetErrorMessagePrefix(s string) {
 	errorMessagePrefix = s
 }
 
+// New create a new *Error instance from ErrorTemplate
+// If input err is already a internal *Error instance, do nothing
 func (t ErrorTemplate) New(err error, v ...interface{}) *Error {
-	e := Error{
-		Code:    t.Code,
-		Message: fmt.Sprintf(t.Message, v...),
-		err:     err,
-	}
+	e := new(Error)
 	if err != nil {
-		if errorMessagePrefix == "" {
-			e.Details = err.Error()
-		} else {
-			e.Details = fmt.Sprintf("%s: %s", errorMessagePrefix, err.Error())
+		if ok := errors.As(err, &e); ok && e.internal {
+			return e
 		}
+		e.Details = fmt.Sprintf("%s: %s", errorMessagePrefix, err.Error())
 	}
-	return &e
+	e.Code = t.Code
+	e.Message = fmt.Sprintf(t.Message, v...)
+	e.err = err
+	e.status = t.status
+	e.internal = true
+	return e
 }
 
 func (e *Error) Error() string {
