@@ -10,7 +10,7 @@ type ErrorTemplate Error
 
 var (
 	// System Error
-	ErrorUnknown            = ErrorTemplate{Code: 10001, Message: "Unknown Error"}
+	ErrorUnknown            = ErrorTemplate{Code: 10001, Message: "Unknown error"}
 	ErrorServiceUnavailable = ErrorTemplate{Code: 10002, Message: "Service unavailable"}
 	ErrorRemoteService      = ErrorTemplate{Code: 10003, Message: "Remote service error"}
 	ErrorRateLimit          = ErrorTemplate{Code: 10004, Message: "Rate limit"}
