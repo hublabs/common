@@ -39,8 +39,8 @@ func SetErrorMessagePrefix(s string) {
 
 // New create a new *Error instance from ErrorTemplate
 // If input err is already a internal *Error instance, do nothing
-func (t ErrorTemplate) New(err error, v ...interface{}) *Error {
-	e := new(Error)
+func (t ErrorTemplate) New(err error, v ...interface{}) Error {
+	var e Error
 	if err != nil {
 		if ok := errors.As(err, &e); ok && e.internal {
 			return e
@@ -55,22 +55,16 @@ func (t ErrorTemplate) New(err error, v ...interface{}) *Error {
 	return e
 }
 
-func (e *Error) Error() string {
-	if e == nil {
-		return ""
-	}
+func (e Error) Error() string {
 	return e.Details
 }
 
-func (e *Error) Unwrap() error {
-	if e == nil {
-		return nil
-	}
+func (e Error) Unwrap() error {
 	return e.err
 }
 
-func (e *Error) Status() int {
-	if e == nil || e.status == 0 {
+func (e Error) Status() int {
+	if e.status == 0 {
 		return http.StatusInternalServerError
 	}
 	return e.status

@@ -14,7 +14,7 @@ func TestErrorsTest(t *testing.T) {
 
 		test.Equals(t, err.Error(), "unknown service: invalid sql")
 
-		var apiError *Error
+		var apiError Error
 		ok := errors.As(err, &apiError)
 		test.Equals(t, ok, true)
 		test.Equals(t, apiError.Code, ErrorUnknown.Code)
@@ -32,7 +32,7 @@ func TestErrorsTest(t *testing.T) {
 
 	t.Run("External", func(t *testing.T) {
 		SetErrorMessagePrefix("serviceB")
-		v := &Error{
+		v := Error{
 			Code:    ErrorDB.Code,
 			Message: ErrorDB.Message,
 			Details: "serviceA: invalid sql",
@@ -43,7 +43,7 @@ func TestErrorsTest(t *testing.T) {
 
 		test.Equals(t, err.Error(), "serviceB: serviceA: invalid sql")
 
-		var apiError *Error
+		var apiError Error
 		ok := errors.As(err, &apiError)
 		test.Equals(t, ok, true)
 		test.Equals(t, apiError.Code, ErrorRemoteService.Code)

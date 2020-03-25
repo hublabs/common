@@ -31,11 +31,11 @@ func (ExampleController) Get(c echo.Context) error {
 ```
 func (ExampleController) Get(c echo.Context) error {
     err := api.ErrorUnknow.New(nil)
-    var apiError *api.Error
+    var apiError api.Error
     errors.As(err, &apiError)
     return c.JSON(apiError.Status(), api.Result{
         Success: false,
-        Error:   *apiError,
+        Error:   apiError,
     })
 }
 ```
@@ -43,7 +43,7 @@ func (ExampleController) Get(c echo.Context) error {
 推荐自行封装以上过程，具体可参考 https://github.com/hublabs/product-api/blob/master/controllers/utils.go
 
 ### 注意：本package有2个重要特性：
-- `api.Error`实现了Golang的Error接口，所以它的对象可以作为`error`在package之间传递  
+- `api.Error`实现了Golang的Error接口，所以它的对象可以作为`error`在package之间传递
 例如：某个Controller调用了`models.GetAll()`，在这个函数中既有DB的错误，也有调用其他服务API的错误，那么可以这么写
 ```
 func GetAll() error {
@@ -88,7 +88,7 @@ func (ExampleController) Get(c echo.Context) error {
 }
 ```
 如果是不同服务间传递Error，可以利用这一特性返回包括调用链的错误信息，这样可以快速定位错误服务，具体可参考
-https://github.com/hublabs/common/blob/master/api/errors_test.go#L33  
+https://github.com/hublabs/common/blob/master/api/errors_test.go#L33
 最后返回的结果示例：
 ```
 {
