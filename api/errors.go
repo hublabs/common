@@ -26,6 +26,10 @@ var (
 	ErrorNotFound               = ErrorTemplate{Code: 10014, Message: "Resource not found", status: http.StatusNotFound}
 	ErrorInvalidFields          = ErrorTemplate{Code: 10015, Message: "Invalid fields [ %v ]", status: http.StatusBadRequest}
 	ErrorParameterParsingFailed = ErrorTemplate{Code: 10016, Message: "Fail to parse parameter [ %v ]", status: http.StatusBadRequest}
+	ErrorNotUpdated             = ErrorTemplate{Code: 10017, Message: "Resource not updated", status: http.StatusBadRequest}
+	ErrorNotCreated             = ErrorTemplate{Code: 10018, Message: "Resource not created", status: http.StatusBadRequest}
+	ErrorNotDeleted             = ErrorTemplate{Code: 10019, Message: "Resource not deleted", status: http.StatusBadRequest}
+	ErrorHasExisted             = ErrorTemplate{Code: 10020, Message: "Resource has existed", status: http.StatusBadRequest}
 
 	// Product Error
 	ErrorInvalidCodeError = ErrorTemplate{Code: 20001, Message: "Code is invalid", status: http.StatusOK}
