@@ -49,14 +49,16 @@ func SetErrorMessagePrefix(s string) {
 // If input err is already a internal *Error instance, do nothing
 func (t ErrorTemplate) New(err error, v ...interface{}) Error {
 	var e Error
+	errorMessage := fmt.Sprintf(t.Message, v...)
 	if err != nil {
 		if ok := errors.As(err, &e); ok && e.internal {
 			return e
 		}
-		e.Details = fmt.Sprintf("%s: %s", errorMessagePrefix, err.Error())
+		errorMessage = err.Error()
 	}
 	e.Code = t.Code
 	e.Message = fmt.Sprintf(t.Message, v...)
+	e.Details = fmt.Sprintf("%s: %s", errorMessagePrefix, errorMessage)
 	e.err = err
 	e.status = t.status
 	e.internal = true
