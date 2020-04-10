@@ -50,4 +50,10 @@ func TestErrorsTest(t *testing.T) {
 		test.Equals(t, apiError.Message, ErrorRemoteService.Message)
 		test.Equals(t, apiError.Details, "serviceB: serviceA: invalid sql")
 	})
+
+	t.Run("err-nil", func(t *testing.T) {
+		SetErrorMessagePrefix("serviceC")
+		err := ErrorUnknown.New(nil)
+		test.Equals(t, "serviceC: Unknown error", err.Error())
+	})
 }
