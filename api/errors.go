@@ -8,6 +8,10 @@ import (
 
 type ErrorTemplate Error
 
+func NewTemplate(code int, message string,status int) ErrorTemplate{
+	return ErrorTemplate{Code: code, Message: message, status:status}
+}
+
 var (
 	// System Error
 	ErrorUnknown                = ErrorTemplate{Code: 10001, Message: "Unknown error"}
