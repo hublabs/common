@@ -12,7 +12,12 @@ import (
 const userClaimContextName = "userClaim"
 
 type UserClaim struct {
-	ColleagueId int64
+	TenantCode    string
+	ColleagueId   int64
+	Username      string
+	BrandCode     string
+	StoreCode     string
+	StoreProvince string
 	jwt.StandardClaims
 }
 

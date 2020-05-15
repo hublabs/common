@@ -18,23 +18,38 @@ func UserClaimMiddleware(skipPaths ...string) echo.MiddlewareFunc {
 					return next(c)
 				}
 			}
-			token := c.Request().Header.Get("Authorization")
-			tokenErr := echo.NewHTTPError(http.StatusUnauthorized, "Invalid token")
-			if token == "" {
-				return tokenErr
-			}
 
-			userClaim, err := UserClaim{}.FromToken(token)
+			req := c.Request()
+			userClaim, err := newUserClaimFromHttpReq(req)
 			if err != nil {
 				return err
 			}
 
-			req := c.Request()
 			c.SetRequest(req.WithContext(context.WithValue(req.Context(), userClaimContextName, userClaim)))
 
 			return next(c)
 		}
 	}
+}
+
+func newUserClaimFromHttpReq(req *http.Request) (UserClaim, error) {
+	token := req.Header.Get("Authorization")
+	tokenErr := echo.NewHTTPError(http.StatusUnauthorized, "Invalid token")
+	if token == "" {
+		return UserClaim{}, tokenErr
+	}
+
+	userClaim, err := UserClaim{}.FromToken(token)
+	if err != nil {
+		return UserClaim{}, tokenErr
+	}
+
+	userClaim.Username = req.Header.Get("X-Username")
+	userClaim.BrandCode = req.Header.Get("X-Brand-Code")
+	userClaim.StoreCode = req.Header.Get("X-Store-Code")
+	userClaim.StoreProvince = req.Header.Get("X-Store-Province")
+
+	return userClaim, nil
 }
 
 func decodeSegment(seg string) ([]byte, error) {
