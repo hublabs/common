@@ -16,7 +16,7 @@ type UserClaim struct {
 	ColleagueId   int64
 	Username      string
 	BrandCode     string
-	StoreCode     string
+	StoreId       int64
 	StoreProvince string
 	jwt.StandardClaims
 }

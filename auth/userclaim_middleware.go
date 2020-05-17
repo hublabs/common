@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/base64"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/labstack/echo"
@@ -46,7 +47,7 @@ func newUserClaimFromHttpReq(req *http.Request) (UserClaim, error) {
 
 	userClaim.Username = req.Header.Get("X-Username")
 	userClaim.BrandCode = req.Header.Get("X-Brand-Code")
-	userClaim.StoreCode = req.Header.Get("X-Store-Code")
+	userClaim.StoreId, _ = strconv.ParseInt(req.Header.Get("X-Store-Id"), 10, 64)
 	userClaim.StoreProvince = req.Header.Get("X-Store-Province")
 
 	return userClaim, nil

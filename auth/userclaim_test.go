@@ -24,14 +24,14 @@ func TestUserClaimFromHttpReq(t *testing.T) {
 	req.Header.Add("Authorization", testToken)
 	req.Header.Add("X-Username", "Jodan")
 	req.Header.Add("X-Brand-Code", "NIKE")
-	req.Header.Add("X-Store-Code", "NK01")
+	req.Header.Add("X-Store-Id", "1512")
 	req.Header.Add("X-Store-Province", "SHH")
 
 	userClaim, err := newUserClaimFromHttpReq(req)
 	test.Ok(t, err)
 
 	test.Equals(t, userClaim.BrandCode, "NIKE")
-	test.Equals(t, userClaim.StoreCode, "NK01")
+	test.Equals(t, userClaim.StoreId, int64(1512))
 	test.Equals(t, userClaim.StoreProvince, "SHH")
 	test.Equals(t, userClaim.Username, "Jodan")
 
